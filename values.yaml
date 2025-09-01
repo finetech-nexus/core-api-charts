@@ -1,0 +1,81 @@
+replicaCount: 1
+hostAliases:
+  - ip: "172.20.10.4"
+    hostnames:
+      - "iam.nexus-bank.io"
+      - "fynams.sandbox.nexus-bank.io"
+image:
+  repository: nexusbank/self-service-api
+  tag: "latest"
+  pullPolicy: Always
+
+env:
+  FINERACT_TENANT: "default"
+  FINERACT_BASE_PATH:  "/fineract-provider/api/v1"
+  KEYCLOAK_URL: "https://iam.nexus-bank.io/auth"
+  KEYCLOAK_REALM: customer
+  KEYCLOAK_CLIENT_ID: selfService-app-oidc
+  KEYCLOAK_CLIENT_SECRET: 3sTbebWgX9nhlTKP6RxmAdStulSOpXp6
+  FINERACT_BASE_URL:  "https://fynams.sandbox.nexus-bank.io"
+
+extraEnv: |
+  - name: NODE_EXTRA_CA_CERTS
+    value: /etc/certificate/ca.pem
+
+extraVolumes:
+  - name: certificate
+    configMap:
+      name: ca-config-map
+extraVolumeMounts:
+  - name: certificate
+    mountPath: /etc/certificate
+    readOnly: true
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  ingressClassName: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+    nginx.ingress.kubernetes.io/proxy-buffers: "416k"
+    cert-manager.io/cluster-issuer: nbank
+  hosts:
+    - host: selfservice.sandbox.nexus-bank.io
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - selfservice.sandbox.nexus-bank.io
+      secretName: "selfservice-tls"
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 10

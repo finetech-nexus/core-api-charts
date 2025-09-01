@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ca-config-map
+data:
+  ca.pem: |-
+{{ .Files.Get "certificates/ca.pem" | indent 4 }}
