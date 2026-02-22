@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "self-service.fullname" . }}
+  name: {{ include "core-banking.fullname" . }}
   labels:
-    {{- include "self-service.labels" . | nindent 4 }}
+    {{- include "core-banking.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "self-service.name" . }}
+      app: {{ include "core-banking.name" . }}
   template:
     metadata:
       labels:
-        app: {{ include "self-service.name" . }}
+        app: {{ include "core-banking.name" . }}
     spec:
       hostAliases: {{ toYaml .Values.hostAliases | nindent 8 }}
       containers:
-        - name: self-service
+        - name: core-banking
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -34,6 +34,42 @@ spec:
               value: "{{ .Values.env.KEYCLOAK_CLIENT_ID }}"
             - name: KEYCLOAK_CLIENT_SECRET
               value: "{{ .Values.env.KEYCLOAK_CLIENT_SECRET }}"
+            - name: KEYCLOAK_ADMIN_CLIENT_ID
+              value: "{{ .Values.env.KEYCLOAK_ADMIN_CLIENT_ID }}"
+            - name: KEYCLOAK_ADMIN_CLIENT_SECRET
+              value: "{{ .Values.env.KEYCLOAK_ADMIN_CLIENT_SECRET }}"
+            - name: KEYCLOAK_INTERNAL_REALM
+              value: "{{ .Values.env.KEYCLOAK_INTERNAL_REALM }}"
+            - name: KEYCLOAK_FINERACT_CLIENT_ID
+              value: "{{ .Values.env.KEYCLOAK_FINERACT_CLIENT_ID }}"
+            - name: KEYCLOAK_FINERACT_CLIENT_SECRET
+              value: "{{ .Values.env.KEYCLOAK_FINERACT_CLIENT_SECRET }}"
+            - name: KEYCLOAK_FINERACT_USERNAME
+              value: "{{ .Values.env.KEYCLOAK_FINERACT_USERNAME }}"
+            - name: KEYCLOAK_FINERACT_PASSWORD
+              value: "{{ .Values.env.KEYCLOAK_FINERACT_PASSWORD }}"
+            - name: FINERACT_BASE_URL
+              value: "{{ .Values.env.FINERACT_BASE_URL }}"
+            - name: FINERACT_BASE_PATH
+              value: "{{ .Values.env.FINERACT_BASE_PATH }}"
+            - name: FINERACT_TENANT
+              value: "{{ .Values.env.FINERACT_TENANT }}"
+            - name: DEFAULT_SAVING_PRODUCT
+              value: "{{ .Values.env.DEFAULT_SAVING_PRODUCT }}"
+            - name: SAVING_PRODUCTS
+              value: '{{ .Values.env.SAVING_PRODUCTS | toJson }}'
+            - name: OFFICE_ID
+              value: "{{ .Values.env.OFFICE_ID }}"
+            - name: SWIFT_BIC
+              value: "{{ .Values.env.SWIFT_BIC }}"
+            - name: BANK_CODE
+              value: "{{ .Values.env.BANK_CODE }}"
+            - name: COUNTRY_CODE
+              value: "{{ .Values.env.COUNTRY_CODE }}"
+            - name: STRIPE_WEBHOOK_SECRET
+              value: "{{ .Values.env.STRIPE_WEBHOOK_SECRET }}"
+            - name: STRIPE_SECRET_KEY
+              value: "{{ .Values.env.STRIPE_SECRET_KEY }}"
               {{- with .Values.extraEnv }}
               {{- tpl . $ | nindent 12 }}
               {{- end }}

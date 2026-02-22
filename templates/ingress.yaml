@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "self-service.fullname" . }}
+  name: {{ include "core-banking.fullname" . }}
   labels:
-    {{- include "self-service.labels" . | nindent 4 }}
+    {{- include "core-banking.labels" . | nindent 4 }}
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
@@ -19,7 +19,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "self-service.fullname" $ }}
+                name: {{ include "core-banking.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}

@@ -10,7 +10,8 @@ apim/
 🧪 Installation
 
 helm dependency update
-helm upgrade -install self-service  . -f values.yaml --namespace back-end   --create-namespace
+helm upgrade -install core-banking-api  . -f valuesfr.yaml --namespace backend-eu   --create-namespace
+helm upgrade -install core-banking-api  . -f values.yaml --namespace backend-tn   --create-namespace
 
 
 TODO
