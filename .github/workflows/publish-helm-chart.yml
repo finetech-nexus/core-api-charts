@@ -1,0 +1,67 @@
+# Build and push this Helm chart to an OCI registry (GitHub GHCR or Oracle OCIR).
+# On push to main (or manual run): build and push chart (version from Chart.yaml).
+#
+# GHCR (default): no extra config. Uses GITHUB_TOKEN; chart pushed to ghcr.io/<owner>/core-banking-api-chart.
+# Oracle OCIR: repo Variables OCI_REGISTRY, OCI_CHART_REPO; Secrets OCI_REGISTRY_USERNAME, OCI_REGISTRY_PASSWORD.
+name: Publish Helm chart (OCI)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.yaml'
+      - '**.yml'
+      - 'templates/**'
+      - '.github/workflows/publish-helm-chart.yml'
+  workflow_dispatch:
+
+jobs:
+  push-chart:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      CHART_PATH: .
+      OCI_REGISTRY: ${{ vars.OCI_REGISTRY == '' && 'ghcr.io' || vars.OCI_REGISTRY }}
+      OCI_REPO: ${{ vars.OCI_CHART_REPO == '' && format('{0}/core-banking-api-chart', github.repository_owner) || vars.OCI_CHART_REPO }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.14.0'
+
+      - name: Enable Helm OCI
+        run: echo "HELM_EXPERIMENTAL_OCI=1" >> $GITHUB_ENV
+
+      - name: Helm dependency build
+        run: helm dependency build ${{ env.CHART_PATH }}
+
+      - name: Package chart
+        id: package
+        run: |
+          helm package ${{ env.CHART_PATH }} --destination ./out
+          CHART_TGZ=$(ls ./out/*.tgz)
+          echo "chart_tgz=${CHART_TGZ}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to OCI registry (GHCR)
+        if: env.OCI_REGISTRY == 'ghcr.io'
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GHCR_TOKEN" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Log in to OCI registry (Oracle OCIR or other)
+        if: env.OCI_REGISTRY != 'ghcr.io'
+        env:
+          OCI_USERNAME: ${{ secrets.OCI_REGISTRY_USERNAME }}
+          OCI_PASSWORD: ${{ secrets.OCI_REGISTRY_PASSWORD }}
+        run: |
+          echo "$OCI_PASSWORD" | helm registry login ${{ env.OCI_REGISTRY }} -u "$OCI_USERNAME" --password-stdin
+
+      - name: Push chart to OCI
+        run: |
+          helm push ${{ steps.package.outputs.chart_tgz }} oci://${{ env.OCI_REGISTRY }}/${{ env.OCI_REPO }}
