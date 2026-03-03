@@ -1,5 +1,5 @@
 # Build and push this Helm chart to an OCI registry (GitHub GHCR or Oracle OCIR).
-# On push to develop or master (or manual run): build and push chart (version from Chart.yaml).
+# On push to main or master (or manual run): build and push chart (version from Chart.yaml).
 #
 # GHCR (default): no extra config. Uses GITHUB_TOKEN; chart pushed to ghcr.io/<owner>/core-banking-api-chart.
 # Oracle OCIR: repo Variables OCI_REGISTRY, OCI_CHART_REPO; Secrets OCI_REGISTRY_USERNAME, OCI_REGISTRY_PASSWORD.
@@ -7,7 +7,7 @@ name: Publish Helm chart (OCI)
 
 on:
   push:
-    branches: [develop, master]
+    branches: [main, master]
     paths:
       - '**.yaml'
       - '**.yml'
