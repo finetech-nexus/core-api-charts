@@ -22,10 +22,6 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
           env:
-            - name: FINERACT_BASE_URL
-              value: "{{ .Values.env.FINERACT_BASE_URL }}"
-            - name: FINERACT_TENANT
-              value: "{{ .Values.env.FINERACT_TENANT }}"
             - name: KEYCLOAK_URL
               value: "{{ .Values.env.KEYCLOAK_URL }}"
             - name: KEYCLOAK_REALM
