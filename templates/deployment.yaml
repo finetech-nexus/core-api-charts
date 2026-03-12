@@ -30,6 +30,8 @@ spec:
               value: "{{ .Values.env.KEYCLOAK_CLIENT_ID }}"
             - name: KEYCLOAK_CLIENT_SECRET
               value: "{{ .Values.env.KEYCLOAK_CLIENT_SECRET }}"
+            - name: SUBJECT_ISSUER
+              value: "{{ .Values.env.SUBJECT_ISSUER }}"
             - name: KEYCLOAK_ADMIN_CLIENT_ID
               value: "{{ .Values.env.KEYCLOAK_ADMIN_CLIENT_ID }}"
             - name: KEYCLOAK_ADMIN_CLIENT_SECRET

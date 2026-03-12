@@ -1,4 +1,3 @@
-{{- if .Values.caConfigMap.create }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,4 +5,3 @@ metadata:
 data:
   ca.pem: |-
 {{ .Files.Get "certificates/ca.pem" | indent 4 }}
-{{- end }}

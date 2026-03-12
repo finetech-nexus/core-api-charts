@@ -37,10 +37,6 @@ env:
   COUNTRY_CODE: "TN"
 
 
-# When false, the app is expected to provide ca-config-map (e.g. via Kustomize configMapGenerator).
-caConfigMap:
-  create: true
-
 extraEnv: |
   - name: NODE_EXTRA_CA_CERTS
     value: /etc/certificate/ca.pem
