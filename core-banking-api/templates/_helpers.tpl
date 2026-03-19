@@ -2,7 +2,6 @@
 core-banking
 {{- end }}
 
-
 {{- define "core-banking.fullname" -}}
 {{ .Release.Name }}-{{ .Chart.Name }}
 {{- end -}}
@@ -13,3 +12,4 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+

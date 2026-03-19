@@ -1,0 +1,83 @@
+replicaCount: 1
+
+# Docker image used by kyc-api
+image:
+  repository: nexusbank/kyc-api
+  tag: "latest"
+  pullPolicy: Always
+
+# Basic environment needed for kyc-api (can be overridden in values files)
+env:
+  PORT: 3000
+  NODE_ENV: production
+  LOG_LEVEL: info
+
+  # KYC (Ballerine)
+  BALLERINE_ENDPOINT: "https://workflowsvc.kyc.dev.sandbox.internal.nbank.fr"
+  BALLERINE_API_KEY: ""
+  BALLERINE_EXTERNAL_AUTH: "Bearer webhook-shared-secret-secret"
+  KYC_PROXY_URL: "https://apim.nbank.fr"
+  KYC_TIMEOUT: 300000
+  KYC_MAX_RETRIES: 3
+  ML_BACKEND_URL: "http://localhost:8000"
+
+# Optional extra env
+extraEnv: |
+  - name: NODE_EXTRA_CA_CERTS
+    value: /etc/certificate/ca.pem
+
+# Optional pod host aliases
+hostAliases: []
+
+# Service account, volumes, node selectors, etc.
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: false
+  ingressClassName: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+    nginx.ingress.kubernetes.io/proxy-buffers: "416k"
+    cert-manager.io/cluster-issuer: nbank
+  hosts:
+    - host: kyc-api.sandbox.internal.nbank.fr
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+extraVolumes:
+  - name: certificate
+    configMap:
+      name: kyc-ca-config-map
+extraVolumeMounts:
+  - name: certificate
+    mountPath: /etc/certificate
+    readOnly: true
+

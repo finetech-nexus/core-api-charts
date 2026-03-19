@@ -1,0 +1,7 @@
+apiVersion: v2
+name: core-banking-api
+description: Helm chart for the Nexus Bank Core Banking API
+type: application
+version: 0.1.1
+appVersion: "1.0.0"
+

@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "core-banking.fullname" . }}
+  name: {{ include "kyc-api.fullname" . }}
   labels:
-    {{- include "core-banking.labels" . | nindent 4 }}
+    {{- include "kyc-api.labels" . | nindent 4 }}
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
@@ -19,7 +19,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "core-banking.fullname" $ }}
+                name: {{ include "kyc-api.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}
@@ -35,3 +35,4 @@ spec:
     {{- end }}
   {{- end }}
 {{- end }}
+

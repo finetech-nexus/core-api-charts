@@ -1,0 +1,9 @@
+dependencies:
+- name: core-banking-api
+  repository: file://./core-banking-api
+  version: 0.1.1
+- name: kyc-api
+  repository: file://./kyc-api
+  version: 0.1.1
+digest: sha256:2e964a5419e7ced167811595df08c201fe82e994c1cdcfdf652e9210cb025e0d
+generated: "2026-03-19T02:03:04.577296+01:00"

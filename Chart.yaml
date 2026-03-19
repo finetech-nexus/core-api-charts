@@ -1,6 +1,13 @@
 apiVersion: v2
-name: core-banking
-description: Helm chart for the TT Mobile Banking MCP core-banking app
+name: core-api
+description: Umbrella chart for Nexus Bank APIs (core-banking-api, kyc-api....)
 type: application
 version: 0.1.1
 appVersion: "1.0.0"
+dependencies:
+  - name: core-banking-api
+    version: 0.1.1
+    repository: file://./core-banking-api
+  - name: kyc-api
+    version: 0.1.1
+    repository: file://./kyc-api
