@@ -1,7 +1,7 @@
-# Build and push this Helm chart to an OCI registry (GitHub GHCR or Oracle OCIR).
+# Build and push the umbrella Helm chart to an OCI registry (GitHub GHCR or Oracle OCIR).
 # On push to main or master (or manual run): build and push chart (version from Chart.yaml).
 #
-# GHCR (default): no extra config. Uses GITHUB_TOKEN; chart pushed to ghcr.io/<owner>/core-banking-api-chart.
+# GHCR (default): no extra config. Uses GITHUB_TOKEN; chart pushed to ghcr.io/finetech-nexus/core-api-charts.
 # Oracle OCIR: repo Variables OCI_REGISTRY, OCI_CHART_REPO; Secrets OCI_REGISTRY_USERNAME, OCI_REGISTRY_PASSWORD.
 name: Publish Helm chart (OCI)
 
@@ -9,9 +9,12 @@ on:
   push:
     branches: [main, master]
     paths:
-      - '**.yaml'
-      - '**.yml'
+      - '**/*.yaml'
+      - '**/*.yml'
+      - 'Chart.yaml'
+      - 'values.yaml'
       - 'templates/**'
+      - 'kyc-api/**'
       - '.github/workflows/publish-helm-chart.yml'
   workflow_dispatch:
 
@@ -23,10 +26,8 @@ jobs:
       packages: write
     env:
       CORE_CHART_PATH: .
-      KYC_CHART_PATH: ./kyc-api
       OCI_REGISTRY: ${{ vars.OCI_REGISTRY == '' && 'ghcr.io' || vars.OCI_REGISTRY }}
-      OCI_REPO_CORE: ${{ vars.OCI_CHART_REPO == '' && format('{0}/core-banking-api-chart', github.repository_owner) || vars.OCI_CHART_REPO }}
-      OCI_REPO_KYC: ${{ vars.OCI_KYC_CHART_REPO == '' && format('{0}/kyc-api-chart', github.repository_owner) || vars.OCI_KYC_CHART_REPO }}
+      OCI_REPO_CORE: ${{ vars.OCI_CHART_REPO == '' && 'finetech-nexus/core-api-charts' || vars.OCI_CHART_REPO }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,20 +42,21 @@ jobs:
 
       - name: Helm dependency build
         run: |
+          set -euo pipefail
           helm dependency build ${{ env.CORE_CHART_PATH }}
-          helm dependency build ${{ env.KYC_CHART_PATH }}
 
       - name: Package chart
         id: package
         run: |
+          set -euo pipefail
           rm -rf ./out
           mkdir -p ./out
-          helm package ${{ env.CORE_CHART_PATH }} --destination ./out
-          helm package ${{ env.KYC_CHART_PATH }} --destination ./out
-          CORE_TGZ=$(ls ./out/core-api-*.tgz | head -n 1)
-          KYC_TGZ=$(ls ./out/kyc-api-*.tgz | head -n 1)
+          CORE_TGZ="$(helm package ${{ env.CORE_CHART_PATH }} --destination ./out | sed -n 's/^Successfully packaged chart and saved it to: //p')"
+          if [ -z "$CORE_TGZ" ]; then
+            echo "Failed to resolve packaged chart paths"
+            exit 1
+          fi
           echo "core_chart_tgz=${CORE_TGZ}" >> "$GITHUB_OUTPUT"
-          echo "kyc_chart_tgz=${KYC_TGZ}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to OCI registry (GHCR)
         if: env.OCI_REGISTRY == 'ghcr.io'
@@ -73,5 +75,5 @@ jobs:
 
       - name: Push chart to OCI
         run: |
+          set -euo pipefail
           helm push ${{ steps.package.outputs.core_chart_tgz }} oci://${{ env.OCI_REGISTRY }}/${{ env.OCI_REPO_CORE }}
-          helm push ${{ steps.package.outputs.kyc_chart_tgz }} oci://${{ env.OCI_REGISTRY }}/${{ env.OCI_REPO_KYC }}
