@@ -20,6 +20,12 @@ env:
   KYC_TIMEOUT: 300000
   KYC_MAX_RETRIES: 3
   ML_BACKEND_URL: "http://localhost:8000"
+  JSON_BODY_LIMIT: "20mb"
+
+  # Liveness gate: a submission is refused unless the ML backend recorded a pass
+  # for the challenge id sent with it. Never enable the bypass in production.
+  LIVENESS_PASS_TTL_MS: 900000
+  ALLOW_LIVENESS_BYPASS: "false"
 
 # Optional extra env
 extraEnv: |
@@ -40,6 +46,7 @@ ingress:
   ingressClassName: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
     nginx.ingress.kubernetes.io/proxy-buffers: "416k"
