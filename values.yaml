@@ -160,3 +160,8 @@ kyc-api:
     - name: certificate
       mountPath: /etc/certificate
       readOnly: true
+
+# AI API (KYC vision models now, AML later). Disabled unless an environment opts
+# in: it shares this release, so a failed rollout remediates the whole core-api.
+ai-api:
+  enabled: false

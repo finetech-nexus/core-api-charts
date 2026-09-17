@@ -15,6 +15,7 @@ on:
       - 'values.yaml'
       - 'templates/**'
       - 'kyc-api/**'
+      - 'ai-api/**'
       - '.github/workflows/publish-helm-chart.yml'
   workflow_dispatch:
 

@@ -5,5 +5,8 @@ dependencies:
 - name: kyc-api
   repository: file://./kyc-api
   version: 0.1.1
-digest: sha256:2e964a5419e7ced167811595df08c201fe82e994c1cdcfdf652e9210cb025e0d
-generated: "2026-03-19T02:03:04.577296+01:00"
+- name: ai-api
+  repository: file://./ai-api
+  version: 0.1.0
+digest: sha256:85299bbe06ba56ca14e3db352d2b7df404730b031fb27b55b71219c521be9efb
+generated: "2026-09-17T22:00:40.96485+02:00"
