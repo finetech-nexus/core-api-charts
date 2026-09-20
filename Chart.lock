@@ -8,5 +8,8 @@ dependencies:
 - name: ai-api
   repository: file://./ai-api
   version: 0.1.0
-digest: sha256:85299bbe06ba56ca14e3db352d2b7df404730b031fb27b55b71219c521be9efb
-generated: "2026-09-17T22:00:40.96485+02:00"
+- name: produit-api
+  repository: file://./produit-api
+  version: 0.1.0
+digest: sha256:7070109e42810a5e4cc59783b4bd5de5e6ff629f3dd5a7dbf577b6cd4b9cbdf9
+generated: "2026-09-20T18:52:23.993824+02:00"
