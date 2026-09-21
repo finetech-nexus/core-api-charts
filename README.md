@@ -9,7 +9,8 @@ Helm chart for the TT Mobile Banking MCP core-banking app (see `Chart.yaml`).
   - **Oracle OCIR (or other):** set repo Variables `OCI_REGISTRY`, `OCI_CHART_REPO` and Secrets `OCI_REGISTRY_USERNAME`, `OCI_REGISTRY_PASSWORD`.
 - **Release Helm chart** (`.github/workflows/release-helm-chart.yml`): manual run from Actions. Enter a version (e.g. `0.2.0`); the workflow bumps `Chart.yaml` version and appVersion, commits, creates tag `v<version>`, and pushes the chart to OCI.
 
-📂 Structure of chart
+- **kyc-api/**, **produit-api/**, **card-management-api/**, **invest-api/**: first-party API subcharts
+- **ai-api/**: optional ML API (disabled by default)
 
 apim/  
 ├── templates/  

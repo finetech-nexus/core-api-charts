@@ -17,6 +17,8 @@ on:
       - 'kyc-api/**'
       - 'ai-api/**'
       - 'produit-api/**'
+      - 'card-management-api/**'
+      - 'invest-api/**'
       - '.github/workflows/publish-helm-chart.yml'
   workflow_dispatch:
 

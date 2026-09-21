@@ -1,0 +1,60 @@
+replicaCount: 1
+
+image:
+  repository: nexusbank/card-management-api
+  tag: "latest"
+  pullPolicy: Always
+
+env:
+  PORT: "3000"
+  NODE_ENV: production
+  LOG_LEVEL: info
+  PRODUIT_API_URL: "http://core-api-produit-api"
+  PROCESSOR: mock
+  PROCESSOR_BASE_URL: "https://mock.tunisie-monetique.local"
+  PROCESSOR_API_KEY: "demo"
+
+extraEnv: ""
+hostAliases: []
+extraVolumes: []
+extraVolumeMounts: []
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: false
+  ingressClassName: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    cert-manager.io/cluster-issuer: nbank-dev
+  hosts:
+    - host: card-management-api.api.dev.sandbox.internal.nbank.fr
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 20
+  periodSeconds: 10
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 10

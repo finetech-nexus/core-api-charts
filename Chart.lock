@@ -11,5 +11,11 @@ dependencies:
 - name: produit-api
   repository: file://./produit-api
   version: 0.1.0
-digest: sha256:7070109e42810a5e4cc59783b4bd5de5e6ff629f3dd5a7dbf577b6cd4b9cbdf9
-generated: "2026-09-20T18:52:23.993824+02:00"
+- name: card-management-api
+  repository: file://./card-management-api
+  version: 0.1.0
+- name: invest-api
+  repository: file://./invest-api
+  version: 0.1.0
+digest: sha256:8110936682585e0912bd1f49de89fd059d68367783d08610ac3ef8e3f6c4a2e7
+generated: "2026-09-21T20:18:36.181446+02:00"
