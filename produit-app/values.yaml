@@ -1,0 +1,54 @@
+enabled: true
+replicaCount: 1
+
+image:
+  repository: nexusbank/produit-app
+  tag: "latest"
+  pullPolicy: Always
+
+env:
+  API_UPSTREAM: "http://core-api-produit-api"
+
+extraEnv: ""
+hostAliases: []
+extraVolumes: []
+extraVolumeMounts: []
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  ingressClassName: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    cert-manager.io/cluster-issuer: nbank-dev
+  hosts:
+    - host: produit-app.dev.sandbox.internal.nbank.fr
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 20
+  periodSeconds: 30
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10

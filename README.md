@@ -10,6 +10,7 @@ Helm chart for the TT Mobile Banking MCP core-banking app (see `Chart.yaml`).
 - **Release Helm chart** (`.github/workflows/release-helm-chart.yml`): manual run from Actions. Enter a version (e.g. `0.2.0`); the workflow bumps `Chart.yaml` version and appVersion, commits, creates tag `v<version>`, and pushes the chart to OCI.
 
 - **kyc-api/**, **produit-api/**, **card-management-api/**, **invest-api/**: first-party API subcharts
+- **produit-app/**: Product Studio UI (optional, `produit-app.enabled`)
 - **ai-api/**: optional ML API (disabled by default)
 
 apim/  

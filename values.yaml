@@ -166,6 +166,41 @@ kyc-api:
 ai-api:
   enabled: false
 
+produit-app:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: nexusbank/produit-app
+    tag: "latest"
+    pullPolicy: Always
+  env:
+    API_UPSTREAM: "http://core-api-produit-api"
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+  ingress:
+    enabled: false
+    ingressClassName: nginx
+    annotations: {}
+    hosts: []
+    tls: []
+  resources: {}
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /health
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 30
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /health
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
 produit-api:
   replicaCount: 1
   image:
