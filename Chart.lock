@@ -20,5 +20,5 @@ dependencies:
 - name: invest-api
   repository: file://./invest-api
   version: 0.1.0
-digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
-generated: "2026-09-22T01:06:00+02:00"
+digest: sha256:6dbe953f07967849c876ed8ca16cc9c047485af26c9e72cb1eebef555fa1fd60
+generated: "2026-09-22T01:31:00.745342+02:00"
