@@ -314,3 +314,43 @@ invest-api:
       port: 3000
     initialDelaySeconds: 10
     periodSeconds: 10
+
+subscription-api:
+  replicaCount: 1
+  image:
+    repository: nexusbank/subscription-api
+    tag: "latest"
+    pullPolicy: Always
+  env:
+    PORT: "8080"
+    DATABASE_URL: "jdbc:h2:file:/data/subscriptions;DB_CLOSE_ON_EXIT=FALSE"
+    JPA_DDL_AUTO: update
+    KEYCLOAK_ISSUER_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal"
+    KEYCLOAK_JWK_SET_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal/protocol/openid-connect/certs"
+    DISABLE_AUTH: "false"
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+  ingress:
+    enabled: false
+    ingressClassName: nginx
+    annotations: {}
+    hosts: []
+    tls: []
+  persistence:
+    enabled: true
+    size: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClass: ""
+    mountPath: /data
+  resources: {}
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 45
+    periodSeconds: 15
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 10

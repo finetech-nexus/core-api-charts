@@ -20,6 +20,7 @@ on:
       - 'produit-app/**'
       - 'card-management-api/**'
       - 'invest-api/**'
+      - 'subscription-api/**'
       - '.github/workflows/publish-helm-chart.yml'
   workflow_dispatch:
 
