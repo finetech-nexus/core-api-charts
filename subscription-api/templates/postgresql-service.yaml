@@ -1,0 +1,19 @@
+{{- if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "subscription-api.postgresql.fullname" . }}
+  labels:
+    {{- include "subscription-api.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgresql
+      port: {{ .Values.postgresql.service.port }}
+      targetPort: postgresql
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "subscription-api.name" . }}-postgresql
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

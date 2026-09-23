@@ -12,7 +12,7 @@ Helm chart for the TT Mobile Banking MCP core-banking app (see `Chart.yaml`).
 - **kyc-api/**, **produit-api/**, **card-management-api/**, **invest-api/**: first-party API subcharts
 - **produit-app/**: Product Studio UI (optional, `produit-app.enabled`)
 - **ai-api/**: optional ML API (disabled by default)
-- **subscription-api/**: customer insurance quotes and subscriptions; persistent H2 by default (one replica) or PostgreSQL through environment configuration.
+- **subscription-api/**: customer insurance quotes and subscriptions; the Helm chart deploys a persistent PostgreSQL StatefulSet using the official `postgres:16-alpine` image.
 
 apim/  
 ├── templates/  

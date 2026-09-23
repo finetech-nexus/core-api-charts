@@ -20,6 +20,22 @@ spec:
       hostAliases:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.postgresql.enabled }}
+      initContainers:
+        - name: wait-for-postgresql
+          image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - >-
+              until pg_isready -h "${PGHOST}" -p "${PGPORT}"; do echo waiting for PostgreSQL; sleep 2; done
+          env:
+            - name: PGHOST
+              value: {{ include "subscription-api.postgresql.fullname" . | quote }}
+            - name: PGPORT
+              value: {{ .Values.postgresql.service.port | quote }}
+      {{- end }}
       containers:
         - name: subscription-api
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -29,8 +45,21 @@ spec:
               containerPort: {{ .Values.service.targetPort }}
           env:
             {{- range $key, $value := .Values.env }}
+            {{- if not (and $.Values.postgresql.enabled (eq $key "DATABASE_URL")) }}
             - name: {{ $key }}
               value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.postgresql.enabled }}
+            - name: DATABASE_URL
+              value: {{ printf "jdbc:postgresql://%s:%v/%s" (include "subscription-api.postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.auth.database | quote }}
+            - name: DATABASE_USERNAME
+              value: {{ .Values.postgresql.auth.username | quote }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgresql.auth.existingSecret | default (include "subscription-api.postgresql.fullname" .) }}
+                  key: {{ .Values.postgresql.auth.existingSecretPasswordKey }}
             {{- end }}
             {{- with .Values.extraEnv }}
               {{- tpl . $ | nindent 12 }}

@@ -323,7 +323,6 @@ subscription-api:
     pullPolicy: Always
   env:
     PORT: "8080"
-    DATABASE_URL: "jdbc:h2:file:/data/subscriptions;DB_CLOSE_ON_EXIT=FALSE"
     JPA_DDL_AUTO: update
     KEYCLOAK_ISSUER_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal"
     KEYCLOAK_JWK_SET_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal/protocol/openid-connect/certs"
@@ -339,7 +338,7 @@ subscription-api:
     hosts: []
     tls: []
   persistence:
-    enabled: true
+    enabled: false
     size: 5Gi
     accessModes:
       - ReadWriteOnce
@@ -354,3 +353,8 @@ subscription-api:
     enabled: true
     initialDelaySeconds: 15
     periodSeconds: 10
+  postgresql:
+    enabled: true
+    persistence:
+      enabled: true
+      size: 10Gi

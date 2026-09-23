@@ -8,6 +8,9 @@
 {{- printf "%s-%s" .Release.Name (include "subscription-api.name" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
+{{- define "subscription-api.postgresql.fullname" -}}
+{{- printf "%s-postgresql" (include "subscription-api.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- define "subscription-api.labels" -}}
 app.kubernetes.io/name: {{ include "subscription-api.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
