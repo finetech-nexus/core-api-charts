@@ -6,8 +6,8 @@ image:
 env:
   PORT: "8080"
   DISABLE_AUTH: "false"
-  KEYCLOAK_ISSUER_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal"
-  KEYCLOAK_JWK_SET_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal/protocol/openid-connect/certs"
+  KEYCLOAK_ISSUER_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/customer"
+  KEYCLOAK_JWK_SET_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/customer/protocol/openid-connect/certs"
   JPA_DDL_AUTO: update
 extraEnv: ""
 hostAliases: []

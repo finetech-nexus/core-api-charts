@@ -324,8 +324,8 @@ subscription-api:
   env:
     PORT: "8080"
     JPA_DDL_AUTO: update
-    KEYCLOAK_ISSUER_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal"
-    KEYCLOAK_JWK_SET_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/internal/protocol/openid-connect/certs"
+    KEYCLOAK_ISSUER_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/customer"
+    KEYCLOAK_JWK_SET_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/customer/protocol/openid-connect/certs"
     DISABLE_AUTH: "false"
   service:
     type: ClusterIP
