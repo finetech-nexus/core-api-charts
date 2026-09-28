@@ -54,3 +54,40 @@ readinessProbe:
     port: 8080
   initialDelaySeconds: 20
   periodSeconds: 10
+
+# Products, offers and campaigns edited in Product Studio. Disable only for throwaway
+# environments: the API then falls back to an in-memory H2 database that is lost on restart.
+postgresql:
+  enabled: true
+  image:
+    repository: postgres
+    tag: "16-alpine"
+    pullPolicy: IfNotPresent
+  auth:
+    username: produit
+    database: produits
+    # A stable random password is generated and retained in a Kubernetes Secret when blank.
+    password: ""
+    existingSecret: ""
+    existingSecretPasswordKey: password
+  service:
+    port: 5432
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5

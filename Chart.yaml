@@ -2,7 +2,7 @@ apiVersion: v2
 name: core-api
 description: Umbrella chart for Nexus Bank APIs (core-banking-api, kyc-api, ai-api, produit-api, produit-app, card-management-api, invest-api, subscription-api)
 type: application
-version: 0.2.6
+version: 0.2.7
 appVersion: "1.0.0"
 dependencies:
   - name: core-banking-api
@@ -18,7 +18,7 @@ dependencies:
     repository: file://./ai-api
     condition: ai-api.enabled
   - name: produit-api
-    version: 0.1.0
+    version: 0.2.0
     repository: file://./produit-api
   - name: produit-app
     version: 0.1.0

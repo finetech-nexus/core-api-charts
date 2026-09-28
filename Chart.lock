@@ -10,7 +10,7 @@ dependencies:
   version: 0.1.0
 - name: produit-api
   repository: file://./produit-api
-  version: 0.1.0
+  version: 0.2.0
 - name: produit-app
   repository: file://./produit-app
   version: 0.1.0
@@ -23,5 +23,5 @@ dependencies:
 - name: subscription-api
   repository: file://./subscription-api
   version: 0.1.1
-digest: sha256:667545d816ec6fabbb022ce1bf959f5f1279a07630b2f7fc0b0532e2e3889314
-generated: "2026-09-23T21:31:09.161376+02:00"
+digest: sha256:29d95f8e6c5fcfdaeb14bf485bb4bbfafdd03cceef9e6036d9a0ea00aa9fe0cb
+generated: "2026-09-28T15:51:36.367315+02:00"

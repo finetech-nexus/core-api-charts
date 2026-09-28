@@ -6,6 +6,10 @@ produit-api
 {{ .Release.Name }}-{{ .Chart.Name }}
 {{- end -}}
 
+{{- define "produit-api.postgresql.fullname" -}}
+{{- printf "%s-postgresql" (include "produit-api.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "produit-api.labels" -}}
 app.kubernetes.io/name: {{ include "produit-api.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
