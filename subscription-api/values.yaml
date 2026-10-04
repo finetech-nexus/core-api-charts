@@ -9,6 +9,11 @@ env:
   KEYCLOAK_ISSUER_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/customer"
   KEYCLOAK_JWK_SET_URI: "https://iam.dev.sandbox.internal.nbank.fr/auth/realms/customer/protocol/openid-connect/certs"
   JPA_DDL_AUTO: update
+  PARRAINAGE_SHARE_BASE_URL: "https://app.nexus-bank.io/r"
+  # Novu — same platform as iam authenticator email (override per environment)
+  NOVU_TRIGGER_URL: "https://api.novu.co/v1/events/trigger"
+  NOVU_API_KEY: ""
+  PARRAINAGE_EMAIL_WORKFLOW_ID: "parrainage-email-workflow"
 extraEnv: ""
 hostAliases: []
 service:
